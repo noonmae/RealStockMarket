@@ -75,6 +75,7 @@ public class RealStockMarket extends JavaPlugin {
 	 */
     public boolean onCommand( final CommandSender sender, Command cmd, String label, final String[] args){
     	
+    	// Help/credits
     	if( args.length < 1 || args[0].equals("?") ){
     		sender.sendMessage( messenger.playerMsg("Help",true) );
     		sender.sendMessage( messenger.playerSubduedMsg("By viveleroi") );
@@ -84,11 +85,11 @@ public class RealStockMarket extends JavaPlugin {
     		return true;
     	}
     	
+    	// List available stocks
     	if( args[0].equals("list") ){
     		sender.sendMessage( messenger.playerMsg("There are LOTS. http://www.reuters.com/finance/stocks",true) );
     		return true;
     	}
-    	
     	
     	// View current stock prices
     	if( args[0].equals("view") ){
@@ -106,6 +107,20 @@ public class RealStockMarket extends JavaPlugin {
     		});
     		
     		return true;
+    	}
+    	
+    	// View your portfolio
+    	if( args[0].equals("mine") || args[0].equals("portfolio") ){
+    		
+    		String playerName = sender.getName();
+    		if( args.length > 1 ){
+    			playerName = args[1];
+    		}
+    		
+    		StockBroker.viewPlayerPortfolio(sender, playerName);
+    		
+    		return true;
+    		
     	}
     	
     	// Buy stocks

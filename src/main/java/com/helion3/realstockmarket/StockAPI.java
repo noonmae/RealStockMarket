@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -23,6 +24,19 @@ public class StockAPI {
 	 */
 	public StockAPI( String...symbols ){
 		this.symbols = symbols;
+	}
+	
+	
+	/**
+	 * 
+	 * @param symbols
+	 */
+	public StockAPI( List<String> symbols ){
+		String[] _tempSymbols = new String[ symbols.size() ];
+		for( int s = 0; s < symbols.size(); s++ ){
+			_tempSymbols[s] = symbols.get(s);
+		}
+		this.symbols = _tempSymbols;
 	}
 	
 	
