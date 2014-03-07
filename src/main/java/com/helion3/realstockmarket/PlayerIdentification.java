@@ -318,10 +318,10 @@ public class PlayerIdentification {
 		PreparedStatement s = null;
 		ResultSet rs = null;
 		try {
-
+			
 			conn = RealStockMarket.sqlite.getConnection();
-    		s = conn.prepareStatement( "SELECT player_id, player, player_uuid FROM players WHERE player IN ('?')" );
-    		s.setString(1, TypeUtils.join(playerNames, "','"));
+    		s = conn.prepareStatement( "SELECT player_id, player, player_uuid FROM players WHERE player IN (?)");
+    		s.setString(1, "'"+TypeUtils.join(playerNames, "','")+"'");
     		rs = s.executeQuery();
 
     		while( rs.next() ){

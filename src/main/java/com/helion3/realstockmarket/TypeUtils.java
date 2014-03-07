@@ -2,6 +2,23 @@ package com.helion3.realstockmarket;
 
 public class TypeUtils {
 	
+	
+	/**
+     * Is the string numeric
+     * @param str
+     * @return
+     */
+	public static boolean isNumeric( String str ){  
+		try{  
+			Integer.parseInt(str);
+		}
+		catch(NumberFormatException nfe){  
+			return false;
+		}
+		return true;
+	}
+	
+	
 	/**
 	 * Method to join array elements of type string
 	 * @author Hendrik Will, imwill.com, bug fixes by viveleroi

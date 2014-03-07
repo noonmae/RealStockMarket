@@ -88,15 +88,23 @@ public class RealStockMarket extends JavaPlugin {
     	if( args.length < 1 || args[0].equals("?") ){
     		sender.sendMessage( messenger.playerMsg("Help",true) );
     		sender.sendMessage( messenger.playerSubduedMsg("By viveleroi") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm list" +ChatColor.WHITE+ " - Where to find symbols") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm view (stock)" +ChatColor.WHITE+ " - Latest prices: /sm view AAPL,GOOG") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm buy (stock) (quant)" +ChatColor.WHITE+ " - Buy stocks: /sm buy AAPL 50") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm sell (stock) (quant)" +ChatColor.WHITE+ " - Buy stocks: /sm buy AAPL 10") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm (mine|portfolio)" +ChatColor.WHITE+ " - Your portfolio") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm portfolio (player)" +ChatColor.WHITE+ " - A player's portfolio") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm ?" +ChatColor.WHITE+ " - Help. You are here.") );
+    		sender.sendMessage( messenger.playerMsg("Learn about Stocks: "+ChatColor.AQUA+"http://www.investopedia.com/university/stocks/") );
     		return true;
     	}
     	
     	// List available stocks
     	if( args[0].equals("list") ){
-    		sender.sendMessage( messenger.playerMsg("There are LOTS. http://www.reuters.com/finance/stocks",true) );
+    		sender.sendMessage( messenger.playerMsg("Stock Symbol List",true) );
+    		sender.sendMessage( messenger.playerSubduedMsg("You may use *any* REAL US stock symbols. Check your favorite stock website or choose from here:") );
+    		sender.sendMessage( messenger.playerMsg("MarketWatch US Stock List: "+ChatColor.AQUA+"http://on.mktw.net/1gYZhpp") );
+    		// http://on.mktw.net/1gYZhpp
     		return true;
     	}
     	
@@ -104,11 +112,12 @@ public class RealStockMarket extends JavaPlugin {
     	if( args[0].equals("view") ){
     		
     		if( args.length != 2 ){
-        		sender.sendMessage( messenger.playerError("Invalid command. Check /sm ? for help.") );
+        		sender.sendMessage( messenger.playerError("Please supply a stock symbol to view. Check /sm ? for help.") );
         		return true;
         	}
     		
     		// Run lookup in an async thread
+    		sender.sendMessage( messenger.playerSubduedMsg("Fetching latest financials...") );
     		getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
     			public void run(){
     				StockBroker.viewInfoForStock(sender, args[1].split(",") );
@@ -120,6 +129,11 @@ public class RealStockMarket extends JavaPlugin {
     	
     	// View your portfolio
     	if( args[0].equals("mine") || args[0].equals("portfolio") ){
+    		
+    		if( args[0].equals("mine") && args.length != 1 ){
+        		sender.sendMessage( messenger.playerError("Too many arguments. Check /sm ? for help.") );
+        		return true;
+        	}
     		
     		String playerName = sender.getName();
     		if( args.length > 1 ){
@@ -145,7 +159,7 @@ public class RealStockMarket extends JavaPlugin {
         		return true;
     		}
     		
-    		if( !isNumeric(args[2]) ){
+    		if( !TypeUtils.isNumeric(args[2]) ){
     			sender.sendMessage( messenger.playerError("Quantity must be a number. Check /sm ? for help.") );
         		return true;
     		}
@@ -157,6 +171,7 @@ public class RealStockMarket extends JavaPlugin {
     		}
     		
     		// Run lookup in an async thread
+    		sender.sendMessage( messenger.playerSubduedMsg("Talking to your stock broker...") );
     		getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
     			public void run(){
     				StockBroker.buyStock( (Player)sender , args[1].split(","), quantity );
@@ -179,7 +194,7 @@ public class RealStockMarket extends JavaPlugin {
         		return true;
     		}
     		
-    		if( !isNumeric(args[2]) ){
+    		if( !TypeUtils.isNumeric(args[2]) ){
     			sender.sendMessage( messenger.playerError("Quantity must be a number. Check /sm ? for help.") );
         		return true;
     		}
@@ -191,6 +206,7 @@ public class RealStockMarket extends JavaPlugin {
     		}
     		
     		// Run lookup in an async thread
+    		sender.sendMessage( messenger.playerSubduedMsg("Talking to your stock broker...") );
     		getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
     			public void run(){
     				StockBroker.sellStock( (Player)sender , args[1].split(","), quantity );
@@ -205,22 +221,6 @@ public class RealStockMarket extends JavaPlugin {
 		return true;
 
     }
-    
-    
-    /**
-     * Is the string numeric
-     * @param str
-     * @return
-     */
-	public static boolean isNumeric( String str ){  
-		try{  
-			Integer.parseInt(str);
-		}
-		catch(NumberFormatException nfe){  
-			return false;
-		}
-		return true;
-	}
     
     
     /**

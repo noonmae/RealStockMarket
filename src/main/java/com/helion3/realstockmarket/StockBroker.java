@@ -152,7 +152,7 @@ public class StockBroker {
 			}
 			
 			// Portfolio totals bar
-			String msg = ChatColor.GOLD + "Portfolio Value: ";
+			String msg = ChatColor.GOLD + "Portfolio Net Value: ";
 			if( totalPortfolioValue > 0 ){
 				msg += ChatColor.GREEN + "+";
 			} else {

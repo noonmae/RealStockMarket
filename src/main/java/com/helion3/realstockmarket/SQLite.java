@@ -116,7 +116,7 @@ public class SQLite {
 	    		
 				s = conn.prepareStatement(
 					"INSERT INTO transactions (player_id,trxn_type,trxn_date,symbol,symbol_price,quantity,total_price) "
-					+ "VALUES (?,'buy',date('now'),?,?,?,?)");
+					+ "VALUES (?,'purchase',date('now'),?,?,?,?)");
 	    		s.setInt(1, stockPlayer.getId());
 	    		s.setString(2, stock.getSymbol());
 	    		s.setDouble(3, stock.getLatestPrice());
@@ -192,7 +192,7 @@ public class SQLite {
 	    		RealStockMarket.log.warning( "Failed to connect to database." );
 	    	} else {
 
-				s = conn.prepareStatement("UPDATE holdings SET quantity = ?, total_price = ? WHERE id = ?");
+				s = conn.prepareStatement("UPDATE holdings SET quantity = ?, total_price = ? WHERE holding_id = ?");
 	    		s.setInt(1, holding.getQuantity());
 	    		s.setDouble(2, holding.getTotal());
 	    		s.setInt(3, holding.getId());
@@ -222,7 +222,7 @@ public class SQLite {
 	    	if( conn == null || conn.isClosed() ){
 	    		RealStockMarket.log.warning( "Failed to connect to database." );
 	    	} else {
-				s = conn.prepareStatement("DELETE FROM holdings WHERE id = ?");
+				s = conn.prepareStatement("DELETE FROM holdings WHERE holding_id = ?");
 	    		s.setInt(1, holding.getId());
 	    		s.executeUpdate();
 	    	}
