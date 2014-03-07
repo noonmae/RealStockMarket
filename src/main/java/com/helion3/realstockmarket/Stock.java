@@ -14,7 +14,7 @@ public class Stock {
 	 * @param lastPrice
 	 */
 	public Stock( String symbol, String companyName, Double lastPrice ){
-		this.symbol = symbol;
+		this.symbol = symbol.toUpperCase();
 		this.companyName = companyName;
 		this.lastPrice = lastPrice;
 	}

@@ -22,7 +22,6 @@ public class SQLite {
 	    try {
 		    Class.forName("org.sqlite.JDBC");
 		    c = DriverManager.getConnection("jdbc:sqlite:plugins/"+RealStockMarket.pluginName+"/"+RealStockMarket.pluginName+".db");
-//		    RealStockMarket.log.info("Connected to sqlite...");
 	    } catch ( Exception e ) {
 	    	RealStockMarket.log.warning( e.getClass().getName() + ": " + e.getMessage() );
 	    }
@@ -160,13 +159,11 @@ public class SQLite {
 	
 	
 	/**
-	 * Sell from holdings 
+	 * Updates quantity/total of current holding
 	 * 
-	 * @param player
-	 * @param stock
-	 * @param quantity
+	 * @param holding
 	 */
-	public void sellFromHoldingsLedger( Player player, Stock stock, int quantity ){
+	public void updateHolding( Holding holding ){
 		Connection conn = null;
 		PreparedStatement s = null;
 		try {
@@ -176,19 +173,40 @@ public class SQLite {
 	    	if( conn == null || conn.isClosed() ){
 	    		RealStockMarket.log.warning( "Failed to connect to database." );
 	    	} else {
+
+				s = conn.prepareStatement("UPDATE holdings SET quantity = ?, total_price = ? WHERE id = ?");
+	    		s.setInt(1, holding.getQuantity());
+	    		s.setDouble(2, holding.getTotal());
+	    		s.setInt(3, holding.getId());
+	    		s.executeUpdate();
 	    		
-	    		// find current holdings for this stock
-	    		// reduce the quantity of each stock until `quantity` is 0
-	    		
-	    		
-//				s = conn.prepareStatement(
-//					"INSERT INTO holdings (player_id,symbol,symbol_price,quantity,total_price) VALUES (?,?,?,?,?)");
-//	    		s.setInt(1, 1); // @todo fix
-//	    		s.setString(2, stock.getSymbol());
-//	    		s.setDouble(3, stock.getLatestPrice());
-//	    		s.setInt(4, quantity);
-//	    		s.setDouble(5, (stock.getLatestPrice() * quantity));
-//	    		s.executeUpdate();
+	    	}
+        } catch (SQLException e) {
+        	e.printStackTrace();
+        } finally {
+        	if(s != null) try { s.close(); } catch (SQLException ignored) {}
+        	if(conn != null) try { conn.close(); } catch (SQLException ignored) {}
+        }
+	}
+	
+	
+	/**
+	 * Removes a current holding because its quantity is 0
+	 * @param holding
+	 */
+	public void deleteHolding( Holding holding ){
+		Connection conn = null;
+		PreparedStatement s = null;
+		try {
+
+			conn = getConnection();
+	    	
+	    	if( conn == null || conn.isClosed() ){
+	    		RealStockMarket.log.warning( "Failed to connect to database." );
+	    	} else {
+				s = conn.prepareStatement("DELETE FROM holdings WHERE id = ?");
+	    		s.setInt(1, holding.getId());
+	    		s.executeUpdate();
 	    	}
         } catch (SQLException e) {
         	e.printStackTrace();
@@ -216,12 +234,12 @@ public class SQLite {
 	    		RealStockMarket.log.warning( "Failed to connect to database." );
 	    	} else {
 	    		
-				s = conn.prepareStatement ("SELECT player_id,symbol,symbol_price,quantity,total_price FROM holdings WHERE player_id = ? ORDER BY symbol,id");
+				s = conn.prepareStatement ("SELECT id,player_id,symbol,symbol_price,quantity,total_price FROM holdings WHERE player_id = ? ORDER BY symbol,id");
 	    		s.setInt(1,1); // @todo fix me
 	    		rs = s.executeQuery();
 		
 	    		while(rs.next()){
-	    			holdings.add( new Holding( rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getInt(4), rs.getDouble(5) ) );
+	    			holdings.add( new Holding( rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getDouble(6) ) );
 				}
 	    	}
         } catch (SQLException e) {
@@ -252,13 +270,13 @@ public class SQLite {
 	    		RealStockMarket.log.warning( "Failed to connect to database." );
 	    	} else {
 	    		
-				s = conn.prepareStatement ("SELECT player_id,symbol,symbol_price,quantity,total_price FROM holdings WHERE player_id = ? AND symbol = ? ORDER BY id");
+				s = conn.prepareStatement ("SELECT id,player_id,symbol,symbol_price,quantity,total_price FROM holdings WHERE player_id = ? AND symbol = ? ORDER BY id");
 	    		s.setInt(1,1);
 	    		s.setString(2, symbol);
 	    		rs = s.executeQuery();
 		
 	    		while(rs.next()){
-	    			holdings.add( new Holding( rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getInt(4), rs.getDouble(5) ) );
+	    			holdings.add( new Holding( rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getDouble(6) ) );
 				}
 	    	}
         } catch (SQLException e) {
@@ -289,10 +307,7 @@ public class SQLite {
 	    	if( conn == null || conn.isClosed() ){
 	    		RealStockMarket.log.warning( "Failed to connect to database." );
 	    	} else {
-	    		
-	    		// Deduct quantity from holdings ledger
-	    		sellFromHoldingsLedger( player, stock, quantity );
-	    		
+
 				s = conn.prepareStatement(
 					"INSERT INTO transactions (player_id,trxn_type,trxn_date,symbol,symbol_price,quantity,total_price) "
 					+ "VALUES (?,'sale',date('now'),?,?,?,?)");

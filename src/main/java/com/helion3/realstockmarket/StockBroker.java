@@ -108,7 +108,7 @@ public class StockBroker {
 					
 					// Holdings Report (Bought shares and totals)
 					// @todo show date?
-					msg = ChatColor.GRAY + "- Bought:";
+					msg = ChatColor.GRAY + "- Own:";
 					msg += ChatColor.WHITE + " " + holding.getQuantity();
 					msg += ChatColor.GRAY + " at "+ChatColor.YELLOW + formatCurrency(holding.getPrice());
 					msg += ChatColor.GRAY + " Cost: ("+formatCurrency(holding.getTotal())+")";
@@ -230,6 +230,7 @@ public class StockBroker {
 		
 		try {
 			
+			// Grab latest prices for the stocks
 			HashMap<String,Stock> stocks = stockAPI.fetchLatestPrices();
 			
 			if( stocks.isEmpty() ){
@@ -237,11 +238,12 @@ public class StockBroker {
 				return;
 			}
 			
-			// Results found, show 'em
+			// Results found, process each stock
 			player.sendMessage( RealStockMarket.messenger.playerMsg("Stock Sales Report",true) );
 			for( Entry<String,Stock> result : stocks.entrySet() ){
 				Stock stock = result.getValue();
 				
+				// Find player's current holdings for this stock
 				List<Holding> holdings = RealStockMarket.sqlite.getPlayerHoldingsForSymbol(player, stock.getSymbol());
 				
 				if( holdings.isEmpty() ){
@@ -249,25 +251,63 @@ public class StockBroker {
 					continue;
 				}
 				
-				// Verify quantity exists in holdings
-				int total_quantity = 0;
-				for( Holding h : holdings ){
-					total_quantity += h.getQuantity();
-				}
-				if( total_quantity < quantity ){
-					player.sendMessage( RealStockMarket.messenger.playerError("Can't sell "+ stock.getSymbol()+". You only have " + total_quantity + " shares") );
-					continue;
-				}
-				
-				// We can proceed with sale!
-				Double totalPrice = (stock.getLatestPrice() * quantity);
-				
-				RealStockMarket.econ.depositPlayer( player.getName(), totalPrice);
-				player.sendMessage( RealStockMarket.messenger.playerSuccess("Sold " +quantity+ " shares of " + stock.getSymbol() + " totaling " + formatCurrency(totalPrice) ) );
-				
-				// Log to the db!
-				RealStockMarket.sqlite.logStockSale(player, stock, quantity);
-
+				int quantityRemainingToSell = quantity;
+	    		
+	    		// Loop each holding and sell off the quantity
+	    		for( Holding holding : holdings ){
+	    			
+	    			int soldFromThisHolding = 0;
+	    			// if selling more than this holding allows
+	    			if( quantityRemainingToSell > holding.getQuantity() ){
+	    				soldFromThisHolding = holding.getQuantity();
+	    			} else {
+	    				soldFromThisHolding = quantityRemainingToSell;
+	    			}
+	    			
+	    			// Update holding
+	    			holding.setQuantity( holding.getQuantity() - soldFromThisHolding );
+	    			
+	    			// Save changes to db
+	    			if( holding.getQuantity() <= 0 ){
+	    				RealStockMarket.sqlite.deleteHolding(holding);
+	    			} else {
+	    				RealStockMarket.sqlite.updateHolding(holding);
+	    			}
+	    			
+	    			quantityRemainingToSell -= soldFromThisHolding;
+	    			
+	    			// Log sale, inform users
+	    			if( soldFromThisHolding > 0 ){
+	    				
+	    				Double totalPrice = (stock.getLatestPrice() * soldFromThisHolding);
+	    				RealStockMarket.econ.depositPlayer( player.getName(), totalPrice);
+	    				
+	    				String msg = ChatColor.GRAY + "Sold ";
+	    				msg += ChatColor.WHITE + ""+soldFromThisHolding;
+	    				msg += " " + ChatColor.AQUA + stock.getSymbol();
+	    				msg += ChatColor.GRAY + " for " + ChatColor.YELLOW + formatCurrency(totalPrice);
+	    				msg += ChatColor.GRAY + " (You paid: "+formatCurrency(holding.getPrice()*soldFromThisHolding)+")";
+	    				msg += ChatColor.GRAY + " Net: ";
+	    				
+	    				double difference = (stock.getLatestPrice() - holding.getPrice())*soldFromThisHolding;
+	    				if( difference > 0 ){
+	    					msg += ChatColor.GREEN+"+";
+	    				} else {
+	    					msg += ChatColor.RED;
+	    				}
+	    				msg += formatCurrency(difference);
+	    				
+	    				player.sendMessage( RealStockMarket.messenger.playerMsg( msg ) );
+	    				
+	    				RealStockMarket.sqlite.logStockSale(player, stock, soldFromThisHolding);
+	    				
+	    			}
+	    				    		
+	    			// If nothing left to sell
+	    			if( quantityRemainingToSell <= 0 ){
+	    				break;
+	    			}
+	    		}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

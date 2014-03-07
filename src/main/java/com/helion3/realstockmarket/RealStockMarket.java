@@ -141,10 +141,16 @@ public class RealStockMarket extends JavaPlugin {
         		return true;
     		}
     		
+    		final int quantity = Integer.parseInt(args[2]);
+    		if( quantity <= 0 ){
+    			sender.sendMessage( messenger.playerError("Quantity must be higher than one. Check /sm ? for help.") );
+        		return true;
+    		}
+    		
     		// Run lookup in an async thread
     		getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
     			public void run(){
-    				StockBroker.buyStock( (Player)sender , args[1].split(","), Integer.parseInt(args[2]) );
+    				StockBroker.buyStock( (Player)sender , args[1].split(","), quantity );
     			}
     		});
     		
@@ -169,18 +175,26 @@ public class RealStockMarket extends JavaPlugin {
         		return true;
     		}
     		
+    		final int quantity = Integer.parseInt(args[2]);
+    		if( quantity <= 0 ){
+    			sender.sendMessage( messenger.playerError("Quantity must be higher than one. Check /sm ? for help.") );
+        		return true;
+    		}
+    		
     		// Run lookup in an async thread
     		getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
     			public void run(){
-    				StockBroker.sellStock( (Player)sender , args[1].split(","), Integer.parseInt(args[2]) );
+    				StockBroker.sellStock( (Player)sender , args[1].split(","), quantity );
     			}
     		});
     		
     		return true;
     	}
+    	
+    	// List available stocks
+		sender.sendMessage( messenger.playerError("Invalid command. Check /sm ? for help.",true) );
+		return true;
 
-		return false;
-		
     }
     
     
