@@ -1,0 +1,8 @@
+name: RealStockMarket
+main: com.helion3.realstockmarket.RealStockMarket
+version: nightly
+default: op
+commands:
+   sm:
+      description: Stock Market
+      usage: /sm
