@@ -3,7 +3,6 @@ package com.helion3.realstockmarket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -42,43 +41,36 @@ public class StockAPI {
 		
 		HashMap<String,Stock> stocks = new HashMap<String,Stock>();
 		
-	    URL url;
+		CSVReader reader = null;
 		try {
 			
-			url = new URL(requestUrl);
+			URL url = new URL(requestUrl);
 			URLConnection connection = url.openConnection();
 			InputStream inStream = connection.getInputStream(); 
 			
-	    	CSVReader reader = null;
-	        try{
-	            reader = new CSVReader(new InputStreamReader(inStream),',');
-	            String[] nextLine;
-	            while ((nextLine = reader.readNext()) != null){
-
-	            	String company = nextLine[0];
-	            	String symbol = nextLine[1];
-	            	Double lastPrice = Double.parseDouble(nextLine[2]);
-	            	
-	            	stocks.put(symbol,  new Stock(symbol,company,lastPrice) );
-	            	
-	            }
+			reader = new CSVReader(new InputStreamReader(inStream),',');
+	        String[] nextLine;
+	        while ((nextLine = reader.readNext()) != null){
+	
+	        	String company = nextLine[0];
+	        	String symbol = nextLine[1];
+	        	Double lastPrice = Double.parseDouble(nextLine[2]);
+	        	
+	        	stocks.put(symbol,  new Stock(symbol,company,lastPrice) );
+	        	
 	        }
-	        catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	        finally {
-	            try {
-	                reader.close();
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
 		}
-		
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 		return stocks;
 		
 	}

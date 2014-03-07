@@ -7,6 +7,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,8 +19,9 @@ public class RealStockMarket extends JavaPlugin {
 	public static Logger log = Logger.getLogger("Minecraft");
 	public static final Messenger messenger = new Messenger(pluginName);
 	public static Economy econ;
+	public static final SQLite sqlite = new SQLite();
 	
-//	private SQLite sqlite = new SQLite();
+	private FileConfiguration config;
 	
 	
 	/**
@@ -28,6 +30,8 @@ public class RealStockMarket extends JavaPlugin {
 	public void onEnable(){
 		
 		log.info(pluginName + " starting...");
+		
+		config = setupConfig();
 		
 //		try {
 //		    Metrics metrics = new Metrics(this);
@@ -43,8 +47,26 @@ public class RealStockMarket extends JavaPlugin {
         }
 		
 		// Start sqlite
-//		sqlite.createTables();
+		sqlite.createTables();
 
+	}
+	
+	
+	/**
+	 * 
+	 */
+	private FileConfiguration setupConfig(){
+		
+		FileConfiguration config = getConfig();
+		
+		// Copy defaults
+		config.options().copyDefaults(true);
+		
+		// save the defaults/config
+		saveConfig();
+		
+		return config;
+		
 	}
 	
 	
@@ -53,12 +75,7 @@ public class RealStockMarket extends JavaPlugin {
 	 */
     public boolean onCommand( final CommandSender sender, Command cmd, String label, final String[] args){
     	
-    	if( args.length < 1 ){
-    		sender.sendMessage( messenger.playerError("Invalid command. Check /sm ? for help.") );
-    		return true;
-    	}
-    	
-    	if( args[0].equals("?") ){
+    	if( args.length < 1 || args[0].equals("?") ){
     		sender.sendMessage( messenger.playerMsg("Help",true) );
     		sender.sendMessage( messenger.playerSubduedMsg("By viveleroi") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm view (stock)" +ChatColor.WHITE+ " - Latest prices: /sm view AAPL,GOOG") );
@@ -68,7 +85,7 @@ public class RealStockMarket extends JavaPlugin {
     	}
     	
     	if( args[0].equals("list") ){
-    		sender.sendMessage( messenger.playerMsg("There are LOTS. http://www.reuters.com/finance/stocks") );
+    		sender.sendMessage( messenger.playerMsg("There are LOTS. http://www.reuters.com/finance/stocks",true) );
     		return true;
     	}
     	

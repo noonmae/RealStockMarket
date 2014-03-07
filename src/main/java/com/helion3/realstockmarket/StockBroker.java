@@ -39,6 +39,7 @@ public class StockBroker {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			sender.sendMessage( RealStockMarket.messenger.playerError("The was an error fetching the stock prices: " + e.getMessage()) );
 		}
 	}
 	
@@ -76,15 +77,18 @@ public class StockBroker {
 					continue;
 				}
 				
+				// Deduct money
 				RealStockMarket.econ.withdrawPlayer( player.getName(), totalPrice);
 				player.sendMessage( RealStockMarket.messenger.playerSuccess("Bought " +quantity+ " shares of " + stock.getSymbol() + " totaling $" + formatDouble(totalPrice) ) );
 				
-				// @todo log to a db
-
+				// Log to the db!
+				RealStockMarket.sqlite.logStockPurchase(player, stock, quantity);
+				
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			player.sendMessage( RealStockMarket.messenger.playerError("The was an error fetching the stock prices: " + e.getMessage()) );
 		}
 	}
 	
@@ -121,12 +125,14 @@ public class StockBroker {
 				RealStockMarket.econ.depositPlayer( player.getName(), totalPrice);
 				player.sendMessage( RealStockMarket.messenger.playerSuccess("Sold " +quantity+ " shares of " + stock.getSymbol() + " totaling $" + formatDouble(totalPrice) ) );
 				
-				// @todo log to a db
+				// Log to the db!
+				RealStockMarket.sqlite.logStockSale(player, stock, quantity);
 
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			player.sendMessage( RealStockMarket.messenger.playerError("The was an error fetching the stock prices: " + e.getMessage()) );
 		}
 	}
 	
