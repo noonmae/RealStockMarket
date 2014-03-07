@@ -51,7 +51,7 @@ public class StockAPI {
 			throw new Exception("No stock symbols have been specified.");
 		}
 		
-		String requestUrl = apiUrl + "?s=" + join(symbols,",") + "&f=" + apiCodes;
+		String requestUrl = apiUrl + "?s=" + TypeUtils.join(symbols,",") + "&f=" + apiCodes;
 		
 		HashMap<String,Stock> stocks = new HashMap<String,Stock>();
 		
@@ -87,33 +87,5 @@ public class StockAPI {
 
 		return stocks;
 		
-	}
-	
-	
-	/**
-	 * Method to join array elements of type string
-	 * @author Hendrik Will, imwill.com, bug fixes by viveleroi
-	 * @param inputArray Array which contains strings
-	 * @param glueString String between each array element
-	 * @return String containing all array elements separated by glue string
-	 */
-	private static String join(String[] inputArray, String glueString) {
-		String output = "";
-		if (inputArray.length > 0) {
-			StringBuilder sb = new StringBuilder();
-			if(!inputArray[0].isEmpty()){
-				sb.append(inputArray[0]);
-			}
-			for (int i=1; i<inputArray.length; i++) {
-				if(!inputArray[i].isEmpty()){
-					if(sb.length() > 0){
-						sb.append(glueString);
-					}
-					sb.append(inputArray[i]);
-				}
-			}
-			output = sb.toString();
-		}
-		return output;
 	}
 }

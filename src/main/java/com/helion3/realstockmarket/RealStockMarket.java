@@ -1,5 +1,7 @@
 package com.helion3.realstockmarket;
 
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
@@ -20,6 +22,7 @@ public class RealStockMarket extends JavaPlugin {
 	public static final Messenger messenger = new Messenger(pluginName);
 	public static Economy econ;
 	public static final SQLite sqlite = new SQLite();
+	public static HashMap<UUID,StockMarketPlayer> stockMarketPlayers = new HashMap<UUID,StockMarketPlayer>();
 	
 	private FileConfiguration config;
 	
@@ -33,6 +36,9 @@ public class RealStockMarket extends JavaPlugin {
 		
 		config = setupConfig();
 		
+		// Start sqlite
+		sqlite.createTables();
+		
 //		try {
 //		    Metrics metrics = new Metrics(this);
 //		    metrics.start();
@@ -45,9 +51,12 @@ public class RealStockMarket extends JavaPlugin {
         if (rsp != null) {
         	econ = rsp.getProvider();
         }
-		
-		// Start sqlite
-		sqlite.createTables();
+        
+        // Register events
+        getServer().getPluginManager().registerEvents(new PlayerEventListeners(), this);
+        
+        // Cache players for anyone online
+        PlayerIdentification.cacheOnlinePlayerPrimaryKeys();
 
 	}
 	
