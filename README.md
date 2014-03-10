@@ -2,6 +2,7 @@
 
 Tired of *fake* stocks and predictable stock markets on your server? Use in-game money to buy and sell **real-world** stocks! 
 
+![RealStockMarket](http://dhmc.us.s3.amazonaws.com/realstockmarket_1.jpg)
 
 ## Features Overview
 
@@ -27,6 +28,9 @@ Grant permissions if you wish, but the defaults are designed responsibly.
 - `realstockmarket.view` - `/sm view (symbols)` - View latest prices of stock symbols
 - `realstockmarket.buy` - `/sm buy (symbols) (quantity)` - View latest prices of stock symbols
 - `realstockmarket.sell` - `/sm sell (symbols) (quantity)` - View latest prices of stock symbols
+
+![RealStockMarket](http://dhmc.us.s3.amazonaws.com/realstockmarket_2.jpg)
+
 
 ## Get Help
 

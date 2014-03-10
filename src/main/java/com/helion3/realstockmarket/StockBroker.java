@@ -111,7 +111,7 @@ public class StockBroker {
 					msg = ChatColor.GRAY + "- Own:";
 					msg += ChatColor.WHITE + " " + holding.getQuantity();
 					msg += ChatColor.GRAY + " at "+ChatColor.YELLOW + formatCurrency(holding.getPrice());
-					msg += ChatColor.GRAY + " Cost: ("+formatCurrency(holding.getTotal())+")";
+					msg += ChatColor.GRAY + " Cost: ("+formatLargeCurrency(holding.getTotal())+")";
 					
 					double difference = stock.getLatestPrice() - holding.getPrice();
 					
@@ -197,13 +197,13 @@ public class StockBroker {
 				Double totalPrice = (stock.getLatestPrice() * quantity);
 				
 				if( currentBalance < totalPrice ){
-					player.sendMessage( RealStockMarket.messenger.playerError("You can't afford " +quantity+ " shares of " + stock.getSymbol() + " totaling " + formatCurrency(totalPrice) ) );
+					player.sendMessage( RealStockMarket.messenger.playerError("You can't afford " +quantity+ " shares of " + stock.getSymbol() + " totaling " + formatLargeCurrency(totalPrice) ) );
 					continue;
 				}
 				
 				// Deduct money
 				RealStockMarket.econ.withdrawPlayer( player.getName(), totalPrice);
-				player.sendMessage( RealStockMarket.messenger.playerSuccess("Bought " +quantity+ " shares of " + stock.getSymbol() + " totaling " + formatCurrency(totalPrice) ) );
+				player.sendMessage( RealStockMarket.messenger.playerSuccess("Bought " +quantity+ " shares of " + stock.getSymbol() + " totaling " + formatLargeCurrency(totalPrice) ) );
 				
 				// Log to the db!
 				RealStockMarket.sqlite.logStockPurchase(player, stock, quantity);
@@ -285,8 +285,8 @@ public class StockBroker {
 	    				String msg = ChatColor.GRAY + "Sold ";
 	    				msg += ChatColor.WHITE + ""+soldFromThisHolding;
 	    				msg += " " + ChatColor.AQUA + stock.getSymbol();
-	    				msg += ChatColor.GRAY + " for " + ChatColor.YELLOW + formatCurrency(totalPrice);
-	    				msg += ChatColor.GRAY + " (You paid: "+formatCurrency(holding.getPrice()*soldFromThisHolding)+")";
+	    				msg += ChatColor.GRAY + " for " + ChatColor.YELLOW + formatLargeCurrency(totalPrice);
+	    				msg += ChatColor.GRAY + " (You paid: "+formatLargeCurrency(holding.getPrice()*soldFromThisHolding)+")";
 	    				msg += ChatColor.GRAY + " Net: ";
 	    				
 	    				double difference = (stock.getLatestPrice() - holding.getPrice())*soldFromThisHolding;
@@ -321,8 +321,19 @@ public class StockBroker {
 	 * @param number
 	 * @return
 	 */
-	private static String formatCurrency(double number) {
+	private static String formatLargeCurrency(double number) {
 		DecimalFormat moneyFormat = new DecimalFormat("$#,###.00");
+		return moneyFormat.format(number);
+	}
+	
+	
+	/**
+	 * 
+	 * @param number
+	 * @return
+	 */
+	private static String formatCurrency(double number) {
+		DecimalFormat moneyFormat = new DecimalFormat("$#,###.0000");
 		return moneyFormat.format(number);
 	}
 }
