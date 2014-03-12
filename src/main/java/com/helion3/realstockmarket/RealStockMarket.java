@@ -111,6 +111,11 @@ public class RealStockMarket extends JavaPlugin {
     	// View current stock prices
     	if( args[0].equals("view") ){
     		
+    		if( !sender.hasPermission("realstockmarket.view") ){
+    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+        		return true;
+    		}
+    		
     		if( args.length != 2 ){
         		sender.sendMessage( messenger.playerError("Please supply a stock symbol to view. Check /sm ? for help.") );
         		return true;
@@ -130,6 +135,16 @@ public class RealStockMarket extends JavaPlugin {
     	// View your portfolio
     	if( args[0].equals("mine") || args[0].equals("portfolio") ){
     		
+    		if( args[0].equals("portfolio") && !sender.hasPermission("realstockmarket.portfolio.others") ){
+    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+        		return true;
+    		}
+    		
+    		else if( args[0].equals("mine") && !sender.hasPermission("realstockmarket.buy") ){
+    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+        		return true;
+    		}
+    		
     		if( args[0].equals("mine") && args.length != 1 ){
         		sender.sendMessage( messenger.playerError("Too many arguments. Check /sm ? for help.") );
         		return true;
@@ -148,6 +163,11 @@ public class RealStockMarket extends JavaPlugin {
     	
     	// Buy stocks
     	if( args[0].equals("buy") ){
+    		
+    		if( !sender.hasPermission("realstockmarket.buy") ){
+    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+        		return true;
+    		}
     		
     		if( args.length != 3 ){
         		sender.sendMessage( messenger.playerError("Invalid command. Check /sm ? for help.") );
@@ -183,6 +203,11 @@ public class RealStockMarket extends JavaPlugin {
     	
     	// Sell stocks
     	if( args[0].equals("sell") ){
+    		
+    		if( !sender.hasPermission("realstockmarket.buy") ){
+    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+        		return true;
+    		}
     		
     		if( args.length != 3 ){
         		sender.sendMessage( messenger.playerError("Invalid command. Check /sm ? for help.") );
