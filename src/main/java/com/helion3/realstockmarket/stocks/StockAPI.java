@@ -1,4 +1,4 @@
-package com.helion3.realstockmarket;
+package com.helion3.realstockmarket.stocks;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +7,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
+
+import com.helion3.realstockmarket.TypeUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
 

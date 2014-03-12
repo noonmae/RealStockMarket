@@ -11,6 +11,10 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import com.helion3.realstockmarket.stocks.Holding;
+import com.helion3.realstockmarket.stocks.Stock;
+import com.helion3.realstockmarket.stocks.StockMarketPlayer;
+
 public class SQLite {
 	
 	/**

@@ -1,5 +1,6 @@
 package com.helion3.realstockmarket;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -13,6 +14,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.helion3.realstockmarket.stocks.StockBroker;
+import com.helion3.realstockmarket.stocks.StockMarketPlayer;
 
 public class RealStockMarket extends JavaPlugin {
 	
@@ -39,12 +43,12 @@ public class RealStockMarket extends JavaPlugin {
 		// Start sqlite
 		sqlite.createTables();
 		
-//		try {
-//		    Metrics metrics = new Metrics(this);
-//		    metrics.start();
-//		} catch (IOException e) {
-//		    log("MCStats submission failed.");
-//		}
+		try {
+		    Metrics metrics = new Metrics(this);
+		    metrics.start();
+		} catch (IOException e) {
+		    log.info("MCStats submission failed.");
+		}
 		
 		// Hook into vault
 		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);

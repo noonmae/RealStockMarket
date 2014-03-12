@@ -1,4 +1,4 @@
-package com.helion3.realstockmarket;
+package com.helion3.realstockmarket.stocks;
 
 public class Stock {
 	

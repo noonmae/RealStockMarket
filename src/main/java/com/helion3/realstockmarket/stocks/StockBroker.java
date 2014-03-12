@@ -1,4 +1,4 @@
-package com.helion3.realstockmarket;
+package com.helion3.realstockmarket.stocks;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.helion3.realstockmarket.RealStockMarket;
 
 public class StockBroker {
 	
