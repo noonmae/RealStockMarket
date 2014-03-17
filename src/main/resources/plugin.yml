@@ -7,18 +7,18 @@ commands:
       description: Stock Market
       usage: /sm
 permissions:
-    realstockmarket.*:
-     description: Gives access to all RealStockMarket commands
-     children:
-       realstockmarket.view: true
-       realstockmarket.buy: true
-       realstockmarket.portfolio.others: true
+   realstockmarket.*:
+      description: Gives access to all RealStockMarket commands
+      children:
+         realstockmarket.view: true
+         realstockmarket.buy: true
+         realstockmarket.portfolio.others: true
    realstockmarket.view:
-     description: View current stock prices
-     default: true
+      description: View current stock prices
+      default: true
    realstockmarket.buy:
-     description: Buy and sell stocks and view your portfolio
-     default: true
+      description: Buy and sell stocks and view your portfolio
+      default: true
    realstockmarket.portfolio.others:
-     description: View portfolios of other users
-     default: true
+      description: View portfolios of other users
+      default: true
