@@ -195,6 +195,11 @@ public class StockBroker {
 			for( Entry<String,Stock> result : stocks.entrySet() ){
 				Stock stock = result.getValue();
 				
+				if( stock.getLatestPrice() <= 0 ){
+				    player.sendMessage( RealStockMarket.messenger.playerError("Invalid stock prices for " + stock.getSymbol() + " - skipping." ) );
+                    continue;
+				}
+				
 				Double currentBalance = RealStockMarket.econ.getBalance( player.getName() );
 				Double totalPrice = (stock.getLatestPrice() * quantity);
 				
