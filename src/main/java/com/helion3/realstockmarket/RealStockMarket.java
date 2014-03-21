@@ -154,12 +154,17 @@ public class RealStockMarket extends JavaPlugin {
         		return true;
         	}
     		
-    		String playerName = sender.getName();
+    		String tmpPlayerName = sender.getName();
     		if( args.length > 1 ){
-    			playerName = args[1];
+    		    tmpPlayerName = args[1];
     		}
     		
-    		StockBroker.viewPlayerPortfolio(sender, playerName);
+    		final String playerName = tmpPlayerName;
+    		getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
+                public void run(){
+                   StockBroker.viewPlayerPortfolio(sender, playerName);
+                }
+    		});
     		
     		return true;
     		
