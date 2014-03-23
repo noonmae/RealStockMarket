@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.helion3</groupId>
   <artifactId>realstockmarket</artifactId>
-  <version>1.0.0-Beta2-SNAPSHOT</version>
+  <version>1.0.0-Beta2</version>
   <name>RealStockMarket</name>
   <dependencies>
     <dependency>

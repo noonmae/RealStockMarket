@@ -1,6 +1,6 @@
 name: RealStockMarket
 main: com.helion3.realstockmarket.RealStockMarket
-version: 1.0.0-Beta
+version: 1.0.0-Beta2
 default: op
 commands:
    sm:
