@@ -260,7 +260,7 @@ public class RealStockMarket extends JavaPlugin {
     /**
 	 * 
 	 */
-	public void onDisnable(){
+	public void onDisable(){
 		log.info(pluginName + " shutting down...");
 	}
 }
