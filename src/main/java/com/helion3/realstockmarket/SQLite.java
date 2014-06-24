@@ -83,6 +83,7 @@ public class SQLite {
 				+ "symbol_price DOUBLE,"
 				+ "quantity INTEGER,"
 				+ "total_price DOUBLE,"
+				+ "purchase_date TEXT,"
 				+ "PRIMARY KEY (holding_id))";
 				stmt.executeUpdate(sql);
 				
@@ -163,7 +164,7 @@ public class SQLite {
 	    		if( stockPlayer == null ) return;
 	    		
 				s = conn.prepareStatement(
-					"INSERT INTO holdings (player_id,symbol,symbol_price,quantity,total_price) VALUES (?,?,?,?,?)");
+					"INSERT INTO holdings (player_id,symbol,symbol_price,quantity,total_price,purchase_date) VALUES (?,?,?,?,?,date('now'))");
 	    		s.setInt(1, stockPlayer.getId());
 	    		s.setString(2, stock.getSymbol());
 	    		s.setDouble(3, stock.getLatestPrice());
@@ -259,12 +260,12 @@ public class SQLite {
 	    		StockMarketPlayer stockPlayer = PlayerIdentification.getRealStockMarketPlayer(playerName);
 	    		if( stockPlayer != null ){
 	    		
-					s = conn.prepareStatement ("SELECT holding_id,player_id,symbol,symbol_price,quantity,total_price FROM holdings WHERE player_id = ? ORDER BY symbol,holding_id");
+					s = conn.prepareStatement ("SELECT holding_id,player_id,symbol,symbol_price,quantity,total_price,purchase_date FROM holdings WHERE player_id = ? ORDER BY symbol,holding_id");
 		    		s.setInt(1,stockPlayer.getId());
 		    		rs = s.executeQuery();
 			
 		    		while(rs.next()){
-		    			holdings.add( new Holding( rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getDouble(6) ) );
+		    			holdings.add( new Holding( rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getDouble(6), rs.getString(7) ) );
 					}
 	    		}
 	    	}
@@ -299,13 +300,13 @@ public class SQLite {
 	    		StockMarketPlayer stockPlayer = PlayerIdentification.getRealStockMarketPlayer(player);
 	    		if( stockPlayer != null ){
 	    		
-					s = conn.prepareStatement ("SELECT holding_id,player_id,symbol,symbol_price,quantity,total_price FROM holdings WHERE player_id = ? AND symbol = ? ORDER BY holding_id");
+					s = conn.prepareStatement ("SELECT holding_id,player_id,symbol,symbol_price,quantity,total_price,purchase_date FROM holdings WHERE player_id = ? AND symbol = ? ORDER BY holding_id");
 		    		s.setInt(1,stockPlayer.getId());
 		    		s.setString(2, symbol);
 		    		rs = s.executeQuery();
 			
 		    		while(rs.next()){
-		    			holdings.add( new Holding( rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getDouble(6) ) );
+		    			holdings.add( new Holding( rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getDouble(6), rs.getString(7) ) );
 					}
 	    		}
 	    	}

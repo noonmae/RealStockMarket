@@ -1,7 +1,9 @@
 package com.helion3.realstockmarket.stocks;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -262,6 +264,17 @@ public class StockBroker {
 	    		
 	    		// Loop each holding and sell off the quantity
 	    		for( Holding holding : holdings ){
+	    		    
+	    		    // Enforce a waiting period before selling a stock. Prevents abuse of any possible delays in API
+	    		    // price updates, or any minute-by-minute abuse
+	    		    Date today = new Date();
+	    		    long diff = today.getTime() - holding.getPurchaseDate().getTime();
+	                long diffHours = diff / (60 * 60 * 1000) % 24;
+	    		    long diffDays = diff / (24 * 60 * 60 * 1000);
+	    		    if( diffDays < 1 ){
+	    		        player.sendMessage( RealStockMarket.messenger.playerError("Can't sell " + stock.getSymbol() + " until the day after purchase. " + (24-diffHours) + " hours left") );
+	                    continue;
+	    		    }
 	    			
 	    			int soldFromThisHolding = 0;
 	    			// if selling more than this holding allows

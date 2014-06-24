@@ -1,5 +1,9 @@
 package com.helion3.realstockmarket.stocks;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Holding {
 	
 	private final int holding_id;
@@ -7,6 +11,7 @@ public class Holding {
 	private final double symbolPrice;
 	private int quantity;
 	private double holdingTotal;
+	private Date purchaseDate;
 	
 	
 	/**
@@ -17,12 +22,17 @@ public class Holding {
 	 * @param quantity
 	 * @param holdingTotal
 	 */
-	public Holding( int holding_id, int player_id, String symbol, double symbolPrice, int quantity, double holdingTotal) {
+	public Holding( int holding_id, int player_id, String symbol, double symbolPrice, int quantity, double holdingTotal, String purchaseDate ) {
 		this.holding_id = holding_id;
 		this.symbol = symbol.toUpperCase();
 		this.symbolPrice = symbolPrice;
 		this.quantity = quantity;
 		this.holdingTotal = holdingTotal;
+		try {
+            this.purchaseDate = new SimpleDateFormat("yyyy-MM-dd").parse( purchaseDate);
+        } catch ( ParseException e ) {
+            e.printStackTrace();
+        }
 	}
 	
 	
@@ -78,5 +88,14 @@ public class Holding {
 	 */
 	public double getTotal(){
 		return holdingTotal;
+	}
+	
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Date getPurchaseDate(){
+	    return purchaseDate;
 	}
 }
