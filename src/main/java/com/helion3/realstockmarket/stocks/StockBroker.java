@@ -1,7 +1,6 @@
 package com.helion3.realstockmarket.stocks;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
