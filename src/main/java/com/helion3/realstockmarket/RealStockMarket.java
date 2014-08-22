@@ -180,6 +180,7 @@ public class RealStockMarket extends JavaPlugin {
     		
     		if( args.length < 3 ) {
     			sender.sendMessage( messenger.playerError("Stock, quantity, or both are missing. Check /sm ? for correct usage.") );
+    			return true;
     		}
     		
     		if( args.length > 3 ){
@@ -228,7 +229,8 @@ public class RealStockMarket extends JavaPlugin {
         	}
         	
         	if ( args.length > 3 ) {
-        		sender.sendMessage ( messenger.playerError("Too many arguments. Check /sm ? for correct usage."))
+        		sender.sendMessage ( messenger.playerError("Too many arguments. Check /sm ? for correct usage."));
+        		return true;
         	}
     		
     		if( !(sender instanceof Player) ){
