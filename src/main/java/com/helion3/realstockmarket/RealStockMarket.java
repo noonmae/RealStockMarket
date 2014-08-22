@@ -195,7 +195,7 @@ public class RealStockMarket extends JavaPlugin {
     		
     		final int quantity = Integer.parseInt(args[2]);
     		if( quantity <= 0 ){
-    			sender.sendMessage( messenger.playerError("Quantity must be higher than one. Check /sm ? for help.") );
+    			sender.sendMessage( messenger.playerError("Quantity must be one or higher. Check /sm ? for help.") );
         		return true;
     		}
     		
@@ -235,7 +235,7 @@ public class RealStockMarket extends JavaPlugin {
     		
     		final int quantity = Integer.parseInt(args[2]);
     		if( quantity <= 0 ){
-    			sender.sendMessage( messenger.playerError("Quantity must be higher than one. Check /sm ? for help.") );
+    			sender.sendMessage( messenger.playerError("Quantity must be one or higher. Check /sm ? for help.") );
         		return true;
     		}
     		
