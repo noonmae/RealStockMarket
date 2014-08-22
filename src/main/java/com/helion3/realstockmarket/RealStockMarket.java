@@ -89,7 +89,7 @@ public class RealStockMarket extends JavaPlugin {
     public boolean onCommand( final CommandSender sender, Command cmd, String label, final String[] args){
     	
     	// Help/credits
-    	if( args.length < 1 || args[0].equals("?") ){
+    	if( args.length < 1 || args[0].equals("?") || args[0].equalsIgnoreCase("help") ){
     		sender.sendMessage( messenger.playerMsg("Help",true) );
     		sender.sendMessage( messenger.playerSubduedMsg("By viveleroi") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm list" +ChatColor.WHITE+ " - Where to find symbols") );
@@ -98,7 +98,7 @@ public class RealStockMarket extends JavaPlugin {
     		sender.sendMessage( messenger.playerSubduedMsg("sm sell (stock) (quant)" +ChatColor.WHITE+ " - Sell stocks: /sm sell AAPL 10") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm (mine|portfolio)" +ChatColor.WHITE+ " - Your portfolio") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm portfolio (player)" +ChatColor.WHITE+ " - A player's portfolio") );
-    		sender.sendMessage( messenger.playerSubduedMsg("sm ?" +ChatColor.WHITE+ " - Help. You are here.") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm (?|help)" +ChatColor.WHITE+ " - Help. You are here.") );
     		sender.sendMessage( messenger.playerMsg("Learn about Stocks: "+ChatColor.AQUA+"http://www.investopedia.com/university/stocks/") );
     		return true;
     	}
@@ -150,7 +150,7 @@ public class RealStockMarket extends JavaPlugin {
     		}
     		
     		if( args[0].equals("mine") && args.length != 1 ){
-        		sender.sendMessage( messenger.playerError("Too many arguments. Check /sm ? for help.") );
+        		sender.sendMessage( messenger.playerError("Too many arguments. Check /sm ? for correct usage.") );
         		return true;
         	}
     		
@@ -178,8 +178,13 @@ public class RealStockMarket extends JavaPlugin {
         		return true;
     		}
     		
-    		if( args.length != 3 ){
-        		sender.sendMessage( messenger.playerError("Invalid command. Check /sm ? for help.") );
+    		if( args.length < 3 ) {
+    			sender.sendMessage( messenger.playerError("Stock, quantity, or both are missing. Check /sm ? for correct usage.") );
+    			return true;
+    		}
+    		
+    		if( args.length > 3 ){
+        		sender.sendMessage( messenger.playerError("Too many arguments. Check /sm ? for correct usage.") );
         		return true;
         	}
     		
@@ -218,8 +223,13 @@ public class RealStockMarket extends JavaPlugin {
         		return true;
     		}
     		
-    		if( args.length != 3 ){
-        		sender.sendMessage( messenger.playerError("Invalid command. Check /sm ? for help.") );
+    		if( args.length < 3 ){
+        		sender.sendMessage( messenger.playerError("Stock, quantity, or both are missing. Check /sm ? for correct usage.") );
+        		return true;
+        	}
+        	
+        	if ( args.length > 3 ) {
+        		sender.sendMessage ( messenger.playerError("Too many arguments. Check /sm ? for correct usage."));
         		return true;
         	}
     		
