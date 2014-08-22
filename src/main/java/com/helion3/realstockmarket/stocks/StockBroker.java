@@ -45,7 +45,7 @@ public class StockBroker {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			sender.sendMessage( RealStockMarket.messenger.playerError("The was an error fetching the stock prices: " + e.getMessage()) );
+			sender.sendMessage( RealStockMarket.messenger.playerError("There was an error fetching the stock prices: " + e.getMessage()) );
 		}
 	}
 	
@@ -166,7 +166,7 @@ public class StockBroker {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			sender.sendMessage( RealStockMarket.messenger.playerError("The was an error fetching the stock prices: " + e.getMessage()) );
+			sender.sendMessage( RealStockMarket.messenger.playerError("There was an error fetching the stock prices: " + e.getMessage()) );
 		}
 	}
 	
@@ -220,7 +220,7 @@ public class StockBroker {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			player.sendMessage( RealStockMarket.messenger.playerError("The was an error fetching the stock prices: " + e.getMessage()) );
+			player.sendMessage( RealStockMarket.messenger.playerError("There was an error fetching the stock prices: " + e.getMessage()) );
 		}
 	}
 	
@@ -330,7 +330,7 @@ public class StockBroker {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			player.sendMessage( RealStockMarket.messenger.playerError("The was an error fetching the stock prices: " + e.getMessage()) );
+			player.sendMessage( RealStockMarket.messenger.playerError("There was an error fetching the stock prices: " + e.getMessage()) );
 		}
 	}
 	
