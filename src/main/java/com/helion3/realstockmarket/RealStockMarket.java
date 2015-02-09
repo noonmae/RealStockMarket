@@ -94,20 +94,20 @@ public class RealStockMarket extends JavaPlugin {
     		sender.sendMessage( messenger.playerSubduedMsg("By viveleroi") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm list" +ChatColor.WHITE+ " - Where to find symbols") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm view (stock)" +ChatColor.WHITE+ " - Latest prices: /sm view AAPL,GOOG") );
-    		sender.sendMessage( messenger.playerSubduedMsg("sm buy (stock) (quant)" +ChatColor.WHITE+ " - Buy stocks: /sm buy AAPL 50") );
-    		sender.sendMessage( messenger.playerSubduedMsg("sm sell (stock) (quant)" +ChatColor.WHITE+ " - Sell stocks: /sm sell AAPL 10") );
-    		sender.sendMessage( messenger.playerSubduedMsg("sm (mine|portfolio)" +ChatColor.WHITE+ " - Your portfolio") );
-    		sender.sendMessage( messenger.playerSubduedMsg("sm portfolio (player)" +ChatColor.WHITE+ " - A player's portfolio") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm buy (stock) (quant)" +ChatColor.WHITE+ " - 주식구매: /sm buy AAPL 50") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm sell (stock) (quant)" +ChatColor.WHITE+ " - 주식판매: /sm sell AAPL 10") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm (mine|portfolio)" +ChatColor.WHITE+ " - 본인의 주식현황") );
+    		sender.sendMessage( messenger.playerSubduedMsg("sm portfolio (player)" +ChatColor.WHITE+ " - 설정한 사람의 주식현황") );
     		sender.sendMessage( messenger.playerSubduedMsg("sm (?|help)" +ChatColor.WHITE+ " - Help. You are here.") );
-    		sender.sendMessage( messenger.playerMsg("Learn about Stocks: "+ChatColor.AQUA+"http://www.investopedia.com/university/stocks/") );
+    		sender.sendMessage( messenger.playerMsg("http://www.investopedia.com/university/stocks/  에서 주식을 확인해주시길 바랍니다.") );
     		return true;
     	}
     	
     	// List available stocks
     	if( args[0].equals("list") ){
-    		sender.sendMessage( messenger.playerMsg("Stock Symbol List",true) );
+    		sender.sendMessage( messenger.playerMsg("주식 목록",true) );
     		sender.sendMessage( messenger.playerSubduedMsg("You may use *any* REAL US stock symbols. Check your favorite stock website or choose from here:") );
-    		sender.sendMessage( messenger.playerMsg("MarketWatch US Stock List: "+ChatColor.AQUA+"http://on.mktw.net/1gYZhpp") );
+    		sender.sendMessage( messenger.playerMsg("가능한 주식 목록: "+ChatColor.AQUA+"http://on.mktw.net/1gYZhpp"+" 에서 구매하고 싶은 주식의 Symbol 이름을 적어주시면 됩니다.") );
     		// http://on.mktw.net/1gYZhpp
     		return true;
     	}
@@ -116,7 +116,7 @@ public class RealStockMarket extends JavaPlugin {
     	if( args[0].equals("view") ){
     		
     		if( !sender.hasPermission("realstockmarket.view") ){
-    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+    			sender.sendMessage( messenger.playerError("당신은 권한이 없습니다.") );
         		return true;
     		}
     		
@@ -126,7 +126,7 @@ public class RealStockMarket extends JavaPlugin {
         	}
     		
     		// Run lookup in an async thread
-    		sender.sendMessage( messenger.playerSubduedMsg("Fetching latest financials...") );
+    		sender.sendMessage( messenger.playerSubduedMsg("찾고 있습니다..") );
     		getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
     			public void run(){
     				StockBroker.viewInfoForStock(sender, args[1].split(",") );
@@ -140,12 +140,12 @@ public class RealStockMarket extends JavaPlugin {
     	if( args[0].equals("mine") || args[0].equals("portfolio") ){
     		
     		if( args[0].equals("portfolio") && !sender.hasPermission("realstockmarket.portfolio.others") ){
-    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+    			sender.sendMessage( messenger.playerError("당신은 권한이 없습니다.") );
         		return true;
     		}
     		
     		else if( args[0].equals("mine") && !sender.hasPermission("realstockmarket.buy") ){
-    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+    			sender.sendMessage( messenger.playerError("당신은 권한이 없습니다.") );
         		return true;
     		}
     		
@@ -174,7 +174,7 @@ public class RealStockMarket extends JavaPlugin {
     	if( args[0].equals("buy") ){
     		
     		if( !sender.hasPermission("realstockmarket.buy") ){
-    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+    			sender.sendMessage( messenger.playerError("당신은 권한이 없습니다.") );
         		return true;
     		}
     		
@@ -219,7 +219,7 @@ public class RealStockMarket extends JavaPlugin {
     	if( args[0].equals("sell") ){
     		
     		if( !sender.hasPermission("realstockmarket.buy") ){
-    			sender.sendMessage( messenger.playerError("You do not have permission for this command.") );
+    			sender.sendMessage( messenger.playerError("당신은 권한이 없습니다.") );
         		return true;
     		}
     		
